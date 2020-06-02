@@ -13,7 +13,7 @@ class Rope(object):
                 self.left = Rope(data[:idiv])
                 self.right = Rope(data[idiv:])
                 self.data = ''
-                self.length = self.left.length + self.right.length      
+                self.length = self.left.length     
         elif isinstance(data, str):
             self.left = None
             self.right = None
@@ -39,3 +39,11 @@ class Rope(object):
             return len(self.left.data) + len(self.right.data)
         else:
             return(len(self.data))
+
+    def search(self,node,i):
+        if node.weight<i and node.right!=None:
+            return search(node.right,i-node.weight)
+        elif node.left!=None:
+            return search(node.left,i)
+        return node.value[i]
+
