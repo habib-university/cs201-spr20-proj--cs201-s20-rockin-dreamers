@@ -38,4 +38,4 @@ class Rope(object):
         if self.left and self.right:
             return len(self.left.data) + len(self.right.data)
         else:
-            return(len(self.data))
+            return(len(self.data)) 
