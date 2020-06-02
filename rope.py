@@ -46,4 +46,3 @@ class Rope(object):
         elif node.left!=None:
             return search(node.left,i)
         return node.value[i]
-
