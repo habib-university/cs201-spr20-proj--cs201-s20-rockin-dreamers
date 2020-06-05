@@ -41,8 +41,8 @@ class Rope(object):
             return(len(self.data))
 
     def search(self,node,i):
-        if node.weight<i and node.right!=None:
+        if node.length<i and node.right!=None:
             return search(node.right,i-node.weight)
         elif node.left!=None:
             return search(node.left,i)
-        return node.value[i]
+        return node.data[i]
