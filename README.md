@@ -10,6 +10,10 @@ Members:
 
 To Do: 
 - [ ] Fix the init function
-- [ ] Complete Basic Datastructure.
+- [ ] Delete method.
+- [ ] Concatenate method.
+- [ ] Insert method.
+- [ ] Split method.
+- [ ] GUI using Tkinter.
 
 
