@@ -9,5 +9,7 @@ Members:
 - M. Usaid Rehman 
 
 To Do: 
+- [ ] Fix the init function
+- [ ] Complete Basic Datastructure.
 
 
