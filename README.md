@@ -9,7 +9,7 @@ Members:
 - M. Usaid Rehman 
 
 To Do: 
-- [ ] Fix the init function
+- [x] Fix the init function
 - [ ] Delete method.
 - [ ] Concatenate method.
 - [ ] Insert method.
