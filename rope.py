@@ -46,6 +46,15 @@ class Rope(object):
             return self.search(node.left,i)
         return node.data[i]
     
+    def concatenation(self, newrope, length, node1, node2):
+
+        self.left = node1
+        self.right = node2
+        self.weight = length
+
+        return self
+
+    
 
 phrase="This code is by Aaron"
 array_phrase=phrase.split()
