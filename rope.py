@@ -55,8 +55,14 @@ class Rope(object):
         return self
 
     
+phrase = "This code is by Aaron"
+phrase2 = "This code is by Umme"
+array_phrase = phrase.split()
+array_phrase2 = phrase2.split()
+rope = Rope(array_phrase)
+rope2 = Rope(array_phrase2)
+newrope = Rope()
+length_left = len(phrase)-len(array_phrase)+1
+r = newrope.concatenation(newrope.current, length_left, rope, rope2)
+print(r.search(r.current, 32))
 
-phrase="This code is by Aaron"
-array_phrase=phrase.split()
-rope=Rope(array_phrase)
-print(rope.search(rope.current,5))
