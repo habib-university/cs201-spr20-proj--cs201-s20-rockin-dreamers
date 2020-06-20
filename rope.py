@@ -5,14 +5,14 @@ class Rope(object):
             if len(data) == 0:
                 self.__init__()
             elif len(data) == 1:
-                self.__init__(data[0],parent=parent)
+                self.__init__(data[0], parent=parent)
             else:
                 self.current = self
                 # Round-up division (to match rope arithmetic associativity)
                 idiv = len(data) // 2 + (len(data) % 2 > 0)
-                self.left = Rope(data[:idiv],parent=self.current)
-                self.right = Rope(data[idiv:],parent=self.current)
-                self.parent=parent 
+                self.left = Rope(data[:idiv], parent=self.current)
+                self.right = Rope(data[idiv:], parent=self.current)
+                self.parent = parent
                 self.data = ''
                 self.weight = len(self.data.join(data[:idiv]))
         elif isinstance(data, str):
@@ -20,11 +20,10 @@ class Rope(object):
             self.right = None
             self.data = data+' '
             self.weight = len(data)
-            self.parent=parent 
+            self.parent = parent
         else:
             raise TypeError('Only strings are currently supported')
         # Word iteration
-
 
     # checks if tree is balanced
     # def __eq__(self, other):
@@ -50,7 +49,7 @@ class Rope(object):
         return node.data[i]
 
     def searchnode(self, node, i):
-        if node.weight==i:
+        if node.weight == i:
             return (node)
         else:
             if node.weight < i and node.right != None:
@@ -72,21 +71,14 @@ class Rope(object):
     #     newnode2 = Rope(datar[splitindex:])
     #     print(newnode1.data)
 
+    def split(self, rootnode, index):
+        target = searchnode(rootnode, index)
+        # case01
+        if target.p == None:
+            return target.left, target.right
+        if target.p != None:
 
-
-    def split(self,rootnode, index):
-         target=searchnode(rootnode,index)
-         ##case01
-         if target.p==None:
-             return target.left,target.right
-         if target.p!=None:
-
-             right_tree=Rope()
-
-
-
-         
-         
+            right_tree = Rope()
 
 
 phrase = "This code is by Aaron"
@@ -100,4 +92,4 @@ rope2 = Rope(array_phrase2)
 # r = newrope.concatenation(newrope.current, length_left, rope, rope2)
 # print(r.search(r.current, 32)
 somenode = rope2.searchnode(rope2.current, 6)
-print(somenode.data)
+print()
