@@ -49,13 +49,14 @@ class Rope(object):
         return node.data[i]
 
     def searchnode(self, node, i):
-        if node.weight == i:
-            return (node)
-        else:
-            if node.weight < i and node.right != None:
-                return self.searchnode(node.right, i-node.weight)
-            elif node.left != None:
-                return self.searchnode(node.left, i)
+        # if node.weight == i:
+        #     return node
+        # else:
+        if node.weight < i and node.right != None:
+            return self.searchnode(node.right, i-node.weight)
+        elif node.left != None:
+            return self.searchnode(node.left, i)
+        return node, i
 
     def concatenation(self, newrope, length, node1, node2):
 
@@ -77,23 +78,29 @@ class Rope(object):
             self.printrope(rootnode.left)
             self.printrope(rootnode.right)
 
-    # def splitnode(self, node, splitindex: int):
-    #     datar = node.data.split()
-    #     newnode1 = Rope(datar[:splitindex])
-    #     newnode2 = Rope(datar[splitindex:])
-    #     print(newnode1.data)
+    def splitnode(self, node, splitindex: int):
+        datar = node.data
+        newnode1 = Rope(datar[:splitindex])
+        newnode2 = Rope(datar[splitindex:])
+        return newnode1, newnode2
 
     def split(self, rootnode, index):
-        target = searchnode(rootnode, index)
-        # case01
-        # if target.p == None:
-        #     return target.left, target.right
-        # if target.p != None:
+        target, i = self.searchnode(rootnode, index)
+        if target.parent == None:
+            # split node at specific index
+            return self.splitnode(target, i)
+        elif target.parent != None:
+            # split node
+            if i != 0:
+                split1, split2 = self.splitnode(target, i)
+                target.left = split1
+                target.right = split2
+                target.weight = len(split1.data)
+                rightnode = target.right
+                target.right = None
+                target.parent.weight -= len(rightnode.data)
 
-        #     right_tree = Rope()
-
-        if target.weight > index:
-            pass
+            # remove link between right leaf and target
 
 
 phrase = "This code is by Aaron."
@@ -107,4 +114,12 @@ rope2 = Rope(array_phrase2)
 # r = newrope.concatenation(newrope.current, length_left, rope, rope2)
 # print(r.search(r.current, 32)
 somenode = rope2.searchnode(rope2.current, 6)
-rope.printrope(rope.current)
+# print(somenode)
+# rope.printrope(rope.current)
+# print(rope.search(rope.current, 7))
+# rope2.split(rope2.current, 4)
+phrase3 = "yes"
+phrase3 = phrase3.split()
+rope3 = Rope(phrase3)
+#rope3.split(rope3, 2)
+rope2.split(rope2.current, 3)
