@@ -65,6 +65,18 @@ class Rope(object):
 
         return self
 
+    def printrope(self, rootnode):
+        if (rootnode.right == None and rootnode.left == None):
+            if rootnode.data != None:
+                print(rootnode.data)
+        elif rootnode.left == None:
+            self.printrope(rootnode.right)
+        elif rootnode.right == None:
+            self.printrope(rootnode.left)
+        else:
+            self.printrope(rootnode.left)
+            self.printrope(rootnode.right)
+
     # def splitnode(self, node, splitindex: int):
     #     datar = node.data.split()
     #     newnode1 = Rope(datar[:splitindex])
@@ -74,15 +86,18 @@ class Rope(object):
     def split(self, rootnode, index):
         target = searchnode(rootnode, index)
         # case01
-        if target.p == None:
-            return target.left, target.right
-        if target.p != None:
+        # if target.p == None:
+        #     return target.left, target.right
+        # if target.p != None:
 
-            right_tree = Rope()
+        #     right_tree = Rope()
+
+        if target.weight > index:
+            pass
 
 
-phrase = "This code is by Aaron"
-phrase2 = "This code is by Umme"
+phrase = "This code is by Aaron."
+phrase2 = "This code is by Umme."
 array_phrase = phrase.split()
 array_phrase2 = phrase2.split()
 rope = Rope(array_phrase)
@@ -92,4 +107,4 @@ rope2 = Rope(array_phrase2)
 # r = newrope.concatenation(newrope.current, length_left, rope, rope2)
 # print(r.search(r.current, 32)
 somenode = rope2.searchnode(rope2.current, 6)
-print()
+rope.printrope(rope.current)
