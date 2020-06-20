@@ -18,9 +18,10 @@ class Rope(object):
         elif isinstance(data, str):
             self.left = None
             self.right = None
-            self.data = data+' '
+            self.data = data
             self.weight = len(data)
             self.parent=parent 
+            self.current = self
         else:
             raise TypeError('Only strings are currently supported')
         # Word iteration
@@ -43,7 +44,7 @@ class Rope(object):
     #         return(len(self.data))
 
     def search(self, node, i):
-        if node.weight < i and node.right != None:
+        if node.weight <= i and node.right != None:
             return self.search(node.right, i-node.weight)
         elif node.left != None:
             return self.search(node.left, i)
@@ -57,6 +58,18 @@ class Rope(object):
                 return self.searchnode(node.right, i-node.weight)
             elif node.left != None:
                 return self.searchnode(node.left, i)
+
+    def search_word(self, node, word):
+        return_node=None
+        if node.data=="":
+            return_node=self.search_word(node.left, word)
+            if return_node==None:
+                return_node=self.search_word(node.right, word)
+        elif node.data==word:
+            return node
+        return return_node
+
+        
 
     def concatenation(self, newrope, length, node1, node2):
 
@@ -80,7 +93,7 @@ class Rope(object):
          if target.p==None:
              return target.left,target.right
          if target.p!=None:
-
+            
              right_tree=Rope()
 
 
@@ -89,15 +102,7 @@ class Rope(object):
          
 
 
-phrase = "This code is by Aaron"
-phrase2 = "This code is by Umme"
-array_phrase = phrase.split()
-array_phrase2 = phrase2.split()
-rope = Rope(array_phrase)
-rope2 = Rope(array_phrase2)
-# newrope = Rope()
-# length_left = len(phrase)-len(array_phrase)+1
-# r = newrope.concatenation(newrope.current, length_left, rope, rope2)
-# print(r.search(r.current, 32)
-somenode = rope2.searchnode(rope2.current, 6)
-print(somenode.data)
+phrase = ["This","code","is","by","Aaron"]
+rope = Rope(phrase)
+node=rope.search_word(rope,"is")
+print(node.data)
