@@ -18,18 +18,10 @@ class Rope(object):
         elif isinstance(data, str):
             self.left = None
             self.right = None
-<<<<<<< HEAD
             self.data = data
             self.weight = len(data)
             self.parent=parent 
             self.current = self
-=======
-            self.data = data+' '
-            self.weight = len(data) + 1
-            self.parent = parent
-            if data == "":
-                self.current = self
->>>>>>> acc47332f90a56673cca3822637da142bc1a3ac7
         else:
             raise TypeError('Only strings are currently supported')
         # Word iteration
@@ -58,60 +50,118 @@ class Rope(object):
         return node.data[i]
 
     def searchnode(self, node, i):
-        if node.weight == i:
-            return (node)
-        else:
-            if node.weight < i and node.right != None:
-                return self.searchnode(node.right, i-node.weight)
-            elif node.left != None:
-                return self.searchnode(node.left, i)
+        if node.weight <= i and node.right != None:
+            return self.searchnode(node.right, i-node.weight)
+        elif node.left != None:
+            return self.searchnode(node.left, i)
+        return node,i
+#Issue: if i>len(rope): returns the rightmost leaf
+        # if node.weight == i:
+        #     return node
+        # else:a
+        #     if node.weight <= i and node.right != None:
+        #         return self.searchnode(node.right, i-node.weight)
+        #     elif node.left != None:
+        #         return self.searchnode(node.left, i)
+    def search_words(self,node, words):
+        wordlist=words.split()
+        index=[]
+        for i in wordlist:
+            n,s,e=self.search_word(node,i)
+            index.append((s,e))
+        return index
 
     def search_word(self, node, word):
         return_node=None
+        s=0
+        e=0
         if node.data=="":
-            return_node=self.search_word(node.left, word)
+            return_node,s,e=self.search_word(node.left, word)
             if return_node==None:
-                return_node=self.search_word(node.right, word)
+                return_node,s,e=self.search_word(node.right, word)
         elif node.data==word:
-            return node
-        return return_node
+            t=node
+            index_s=0
+            while t.parent!=None:
+                if t.parent.right==t:
+                    index_s+=t.parent.weight
+                t=t.parent
+            index_e=index_s+len(node.data)
+            return node,index_s,index_e
+        return return_node,s,e
+
+
+    def splits(self,root,i):
+        node,t=self.searchnode(root,i)
+        node0=Rope(node.data[0:t])
+        node1=Rope(node.data[t:])
+        node.data=''
+        node.weight=len(node0.data)
+        node.left=node0
+        node.right=node1
+        node0.parent=node
+        node1.parent=node
+        l2=self.split(root,i)
+        l1=self.split(root,0)
+        return l1,l2
+
+    def nuke(self,node):
+        if node.parent.right==node:
+            node.parent.right=None
+        elif node.parent.left==node:
+            node.parent.left=None
+            node.parent.weight=node.parent.weight-node.weight
+        node.parent=None
+
+    def split(self,root, i, limit=None):
+        arr=[]
+        node,t=self.searchnode(root,i)
+        #Chops off the required strings
+        while node!=None:
+            arr.append(node.data)
+            self.nuke(node)
+            i=i+node.weight
+            node,t=self.searchnode(root,i)
+            if node.data=="":
+                node=None
+            if i==limit:
+                node=None
+        r=Rope(arr)
+        return r
+    
+    # def balance(self,node):
+    #     if node.left!=None:
+    #         self.balance(node.left)
+    #     if node.right!=None:
+    #         self.balance(node.right)
+    #     if node.left == None and node.right==None:
+    #             self.nuke(node)
+    #     elif node.left == None and node.right != None:
+    #         node.parent.right=node.right
+    #         node.right.parent=node.parent
+    #     elif node.left != None and node.right == None:
+    #         node.parent.left=node.left
+    #         node.left.parent=node.parent
+        
+        
+        
 
         
 
-    def concatenation(self, newrope, length, node1, node2):
 
+
+
+    def concatenation(self, newrope, length, node1, node2):
         self.left = node1
         self.right = node2
         self.weight = length
         # self.current = self
         return self
 
-    # def splitnode(self, node, splitindex: int):
-    #     datar = node.data.split()
-    #     newnode1 = Rope(datar[:splitindex])
-    #     newnode2 = Rope(datar[splitindex:])
-    #     print(newnode1.data)
 
-    # def split(self, rootnode, index):
-    #     target = searchnode(rootnode, index)
-    #     # case01
-    #     if target.p == None:
-    #         return target.left, target.right
-    #     if target.p != None:
-
-    #         right_tree = Rope()
-
-
-s = "Hi we are friends"
+s = "Hi we are friends Anas Ali"
 s_split = s.split()
-r = Rope(s_split)
-s2 = "okay thats great"
-s2_split = s2.split()
-r2 = Rope(s2_split)
-print(s_split, s2_split)
-print(r.search(r.current, 3))
-# print(r2.search(r2.current, 2))
-newrope = Rope()
-len_left = len(s)-len(s_split) + 1
-newrope = newrope.concatenation(newrope, len_left, r, r2)
-print(newrope.search(newrope.current, 19))
+r=Rope(s_split)
+r1,r2=r.splits(r,5)
+node=r2.search_words(r2,'Anas')
+print(node)
