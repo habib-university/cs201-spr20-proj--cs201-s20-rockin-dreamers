@@ -44,6 +44,16 @@ class Rope(object):
     #     else:
     #         return(len(self.data))
 
+    def length(self, rootnode):
+        if rootnode.right == None and rootnode.left == None:
+            return len(rootnode.data)
+        elif rootnode.right == None and rootnode.left != None:
+            return self.length(rootnode.left)
+        elif rootnode.right != None and rootnode.left == None:
+            return self.length(rootnode.right)
+        else:
+            return self.length(rootnode.right) + self.length(rootnode.left)
+
     def search(self, node, i):
         if node.weight <= i and node.right != None:
             return self.search(node.right, i-node.weight)
@@ -79,11 +89,15 @@ class Rope(object):
     def printrope(self, rootnode):
         if (rootnode.right == None and rootnode.left == None):
             if rootnode.data != None:
+                print('x')
                 print(rootnode.data)
-        elif rootnode.left == None:
-            self.printrope(rootnode.right)
+
         elif rootnode.right == None:
             self.printrope(rootnode.left)
+
+        elif rootnode.left == None:
+            self.printrope(rootnode.right)
+
         else:
             self.printrope(rootnode.left)
             self.printrope(rootnode.right)
@@ -95,7 +109,8 @@ class Rope(object):
         return newnode1, newnode2
 
     def split(self, rootnode, index):
-        target, i = self.searchnode(rootnode, index)
+        oglength = self.length(rootnode)
+        target, i = self.searchnode(rootnode, index+1)
         if target.parent == None:
             # split node at specific index
             return self.splitnode(target, i)
@@ -108,9 +123,27 @@ class Rope(object):
                 target.weight = len(split1.data)
                 rightnode = target.right
                 target.right = None
-                target.parent.weight -= len(rightnode.data)
+                orphans = [rightnode]
+                target.parent.weight = self.length(target.parent.left)
+                #rootnode.weight -= rightnode.weight
+            elif i == 0:
+                target = target.parent
+                rightnode = target.right
+                orphans = [rightnode]
+                target.right = None
+                target.parent.weight = self.length(target.parent.left)
+                #rootnode.weight -= rightnode.weight
 
-            # remove link between right leaf and target
+            while target.parent != None:
+                if (oglength - self.length(target.parent.right) > index):
+                    orphans.append(target.parent.right)
+                    target.parent.right = None
+                    target.parent.weight = self.length(target.parent.left)
+                else:
+                    print("what")
+                target.parent = target.parent.parent
+        for orphan in orphans:
+            orphan.printrope(orphan.current)
 
 
 phrase = "This code is by Aaron."
@@ -128,22 +161,8 @@ somenode = rope2.searchnode(rope2.current, 6)
 # rope.printrope(rope.current)
 # print(rope.search(rope.current, 7))
 # rope2.split(rope2.current, 4)
-phrase3 = "yes"
+
+phrase3 = "yes what is up"
 phrase3 = phrase3.split()
 rope3 = Rope(phrase3)
-# rope3.split(rope3, 2)
-rope2.split(rope2.current, 3)
-
-s = "Hi we are friends"
-s_split = s.split()
-r = Rope(s_split)
-s2 = "okay thats great"
-s2_split = s2.split()
-r2 = Rope(s2_split)
-print(s_split, s2_split)
-print(r.search(r.current, 3))
-# print(r2.search(r2.current, 2))
-newrope = Rope()
-len_left = len(s)-len(s_split) + 1
-newrope = newrope.concatenation(newrope, len_left, r, r2)
-print(newrope.search(newrope.current, 19))
+rope3.split(rope3.current, 7)
