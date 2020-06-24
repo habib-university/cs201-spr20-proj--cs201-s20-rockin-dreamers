@@ -14,6 +14,6 @@ To Do:
 - [x] Concatenate method.
 - [ ] Insert method. - waiting on usaid
 - [ ] Split method.
-- [ ] GUI using Tkinter.
+- [ ] GUI using Tkinter. -rough online of gui
 
 
