@@ -10,10 +10,10 @@ Members:
 
 To Do: 
 - [x] Fix the init function
-- [ ] Delete method. - waiting on usaid
+- [x] Delete method. - waiting on usaid
 - [x] Concatenate method.
-- [ ] Insert method. - waiting on usaid
+- [x] Insert method. - waiting on usaid
 - [ ] Split method.
-- [ ] GUI using Tkinter. -rough online of gui
+- [x] GUI using Tkinter. 
 
 
